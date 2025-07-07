@@ -1,0 +1,19 @@
+.Courses{
+    font-family:'Inter', sans-serif;
+    padding:15px;
+}
+.heading{
+    color:rgba(255,255,255,0.85);
+    font-size:2.4rem;
+    font-weight: bold;
+    margin-left:5px;
+    margin-top:10px;
+    margin-bottom:40px;
+}
+.allCoursesContainer{
+    margin: 0 auto;
+    margin-top: 15px;
+    display:grid;
+    gap:20px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}

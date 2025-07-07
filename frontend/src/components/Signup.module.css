@@ -1,0 +1,135 @@
+.Signup{
+    /* height:100%; */
+    padding:30px;
+    background: linear-gradient(145deg, #0d0d0d, #1a1a1a, #2b2b2b);
+    /* height:100%; */
+    color: #b0b0b0; /* Light text color */
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+  width:60%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top-right-radius: 7px;
+  border-bottom-right-radius: 7px;
+  height:auto;
+
+}
+.SignupHeading{
+    text-align: center;
+    font-size: 2rem;
+    font-weight:bold;
+    font-family: Inter, sans-serif;
+}
+.logo{
+    margin:0 auto;
+    /* margin-top:-20px; */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 3rem;
+    color: gold; /* Gold color for the text */
+    display: inline-block;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Slight shadow to make it pop */
+    margin-bottom: 5px; /* Space between the logo and the form */
+}
+.SignupForm{
+    margin: 20px 0;
+    display:flex;
+    flex-direction: column;
+
+}
+.FullName{
+    display:flex;
+    justify-content: flex-start;
+    gap:10px;
+}
+
+.SignupForm label{
+    display:block;
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.85); /* soft white */
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    margin-left:3px;
+}
+.SignupForm input{
+    padding: 0.75rem 1rem;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.05);
+    border:none;
+    color:#fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    width:93%;
+    display:block;
+}
+.redInput{
+    box-shadow: 0 0 0 2px #e74c3c;
+}
+
+.password p{
+    font-size:0.85rem;
+    margin-top:5px;
+    margin-bottom:-5px;
+}
+.SignupForm input:focus{
+    background: rgba(255,255,255, 0.05);
+    box-shadow: 0 0 0 1px #FFD700;
+}
+.SignupForm button{
+    padding:0.75rem;
+    margin-top:10px;
+    border-radius:15px;
+    cursor: pointer;
+    background-color: #FFD700;
+    border:none;
+    color:#000;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease-out;
+}
+.SignupForm button:hover{
+    background-color: #d4ac0d;
+    
+}
+.FullName, .email, .password, .repeatPswd{
+    margin-bottom: 1.2rem;
+}
+.FirstName input, .LastName input{
+    width:85%;
+}
+.FirstName {
+    margin-right:5px;
+}
+.LastName {
+    margin-left:5px;
+}
+.OtherOption{
+    margin:-10px auto;
+    font-size:0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+.OtherOption a:hover{
+    color: #FFD700;
+    text-decoration: underline;
+}
+.OtherOption a{
+    color: #FFD700;
+    text-decoration: none;
+}
+.OtherRole{
+    margin: 0 auto;
+    margin-top:15px;
+    margin-bottom:-15px;
+    font-size:0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+
+}
+.OtherRole span{
+    color:#FFD700;
+    cursor:pointer;
+}
+.OtherRole span:hover{
+    text-decoration: underline;
+}

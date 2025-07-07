@@ -1,0 +1,75 @@
+.CreateCourseForm{
+    margin-top:20px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heading{
+    text-align: center;
+    color:rgba(255, 255, 255, 0.85);
+    font-size:2.5rem;
+
+}
+
+.formDiv{
+    margin-top:20px;
+    display: flex;
+    flex-direction: column;
+}
+.formDiv label {
+    display:block;
+    color: #ccc;
+    font-size:1.1rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    margin-left:3px;
+}
+
+.formDiv input, .formDiv textarea{
+    /* width:98.7% */
+    font-family: inherit;
+    font-size:1.1rem;
+    background-color: #1c1c1c;
+    border-radius: 6px;
+    border: none;
+    padding:0.75rem 1rem;
+    /* margin-bottom: 10px; */
+    color:#fff;
+    outline:none;
+    transition:all 0.3s ease;
+    margin-bottom: 0;
+}
+.formDiv input{
+    width:95%;
+}
+.formDiv input[type="number"]::-webkit-outer-spin-button,
+.formDiv input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.redInput{
+    box-shadow: 0 0 0 2px #e74c3c;
+}
+.formDiv .title, .formDiv .description,  .formDiv .price,  .formDiv .imageUrl{
+    margin-bottom: 1.5rem;
+}
+
+.formDiv input:focus, .formDiv textarea:focus {
+    box-shadow: 0 0 0 1px #FFD700;
+}
+.formDiv button {
+    background-color: #FFD700;
+    color:#000;
+    font-weight: bold;
+    font-size:1.1rem;
+    padding:0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    border:none;
+    transition: background-color 0.2s ease;
+}
+.formDiv button:hover{
+    background-color: #e0bb00;
+}

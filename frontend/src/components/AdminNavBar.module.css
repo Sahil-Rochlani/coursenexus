@@ -1,0 +1,177 @@
+.AdminPageWrapper{
+    position:relative;
+    width: 100%;
+    /* overflow-x: scroll; */
+}
+.AdminPageWrapper::-webkit-scrollbar {
+    display: none;
+    width:0;
+    height:0;
+  }
+.AdminPage{
+    background: #111111;
+    font-family: 'Inter', sans-serif;
+    min-height:100vh;
+    padding:15px 20px;
+    /* width:max-content; */
+    width:1480.8px;
+}
+
+.AdminNavBar{
+    background-color: #111111;
+    /* position: sticky;
+    top:15px;
+    z-index:1000; */
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+}
+.logo{
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight:600;
+    color: #FFD700;
+    margin-left:20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+.OtherOptions{
+    display:flex;
+    justify-content: space-between;
+    gap:30px;
+    align-items: center;
+    margin-right: 20px;
+}
+.OtherOptions span{
+    color:rgba(255,255,255,0.85);
+    font-size:1.5rem;
+}
+.OtherOptions span a{
+    color:inherit;
+    font-size:1.1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.OtherOptions span a:hover{
+    color:#FFD700
+}
+.OtherOptions button{
+    background-color: #FFD700;
+    padding: 0.45em 0.75rem;
+    font-size:1.1rem;
+    font-weight: bold;
+    color:#000;
+    border-radius:6px; 
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    cursor:pointer;
+    border: none;
+}
+.OtherOptions button:hover{
+    transform:scale(1.05);
+    background-color: #e6c200;
+}
+.editModalWrapper {
+    opacity:0;
+    visibility: hidden;
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display:flex;
+    justify-content: center;
+    align-items:flex-start;
+    transition: opacity 0.3s ease;
+    
+
+
+}
+
+.editModal {
+    position: sticky;
+    top:0;
+    /* position:absolute;
+    top:0;
+    left:50%;
+    transform: translateX(-50%); */
+    background-color: #111111;
+    padding:30px;
+    border-radius:10px;
+    transform: translateY(100px);
+    transition:transform 0.5s ease;
+}
+.modalHeading{
+    color:rgba(255,255,255,0.85);
+    font-weight: bold;
+    font-size:2.4rem;
+}
+.editForm{
+    position:sticky;
+    top:0;
+    margin-top: 20px;
+    display:flex;
+    flex-direction: column;
+    /* align-items: center; */
+    font-family: 'Inter', sans-serif;
+}
+.editForm label{
+    display:block;
+    color:#ccc;
+    font-size:1.1rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    margin-left:3px;
+}
+.editForm input, .editForm textarea{
+    font-family: inherit;
+    font-size:1.1rem;
+    background-color: #1c1c1c;
+    border-radius: 6px;
+    border:none;
+    padding:0.75rem 1rem;
+    color:#fff;
+    outline:none;
+    transition:all 0.3s ease;
+    margin-bottom: 0;
+} 
+.editForm input{
+    width:95%;
+}
+.redInput{
+    box-shadow: 0 0 0 2px #e74c3c;
+}
+.editForm .editTitle, .editForm .editDescription,  .editForm .editPrice,  .editForm .editImageUrl{
+    margin-bottom: 1.5rem;
+}
+
+.editForm input:focus, .editForm textarea:focus {
+    box-shadow: 0 0 0 1px #FFD700;
+}
+.editForm .buttons{
+    display: flex;
+    gap:20px;
+    justify-content: flex-end;
+}
+.buttons button{
+    border: none;
+    padding:0.45rem 0.75rem;
+    font-size:1.1rem;
+    border-radius:10px;
+    font-weight: bold;
+    cursor:pointer;
+    transition: background-color 0.2s ease;
+    
+
+}
+.buttons .saveBtn{
+    background-color: #FFD700;
+    color:#000;
+    border: none;
+}
+.saveBtn:hover{
+    background-color: #e0bb00;
+}
+.cancelBtn:hover{
+    background-color: #ccc;
+}

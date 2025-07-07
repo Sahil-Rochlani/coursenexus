@@ -1,0 +1,106 @@
+.CourseCard{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    width:346.1px;
+}
+.thumbnail{
+    width:100%;
+    height:193.81px;
+    border-top-right-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+}
+.CourseDetails{
+    /* padding:10px; */
+    position:relative;
+    width:calc(100% - 40px);
+    margin:15px auto;
+    display:flex;
+    flex-direction: column;
+    
+    /* border:1px solid white; */
+}
+
+.courseTitle{
+    height: 3rem;
+    word-break: break-word;  /* or break-all */
+    font-weight: 600;
+    color:rgba(255,255,255,0.85);
+    font-size:1.2rem;
+    letter-spacing: 0;
+    line-height: 1.2;
+    margin-bottom:12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;       /* show 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.descWrapper{
+    position: relative;
+    display:flex;
+}
+.courseDesc{
+    
+    position:relative;
+    color:#999;
+    /* width:78%; */
+    display: -webkit-box;
+          /* show 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* white-space: nowrap; */
+    /* text-overflow: ellipsis; */
+    transition: max-height 0.7s ease;
+}
+.courseDesc.expanded{
+    -webkit-line-clamp: unset;
+    max-height:500px;
+}
+.courseDesc.collapsed{
+    -webkit-line-clamp: 2; 
+    max-height:3rem;
+}
+.viewChanger{
+    /* border:2px solid white; */
+    width:50%;
+    text-align: end;
+    position:absolute;
+    color: #555;
+    cursor: pointer;
+    bottom:0;
+    right: 0px;
+    background: linear-gradient(to left, #111 45%, transparent);
+}
+.viewChanger2{
+    color: #555;
+    cursor: pointer;
+}
+.coursePrice{
+    margin-top:15px;
+    font-size:1.2rem;
+    color:rgba(255,255,255,0.85);
+    font-weight: bold;
+}
+.Btn{
+    margin:0 auto;
+    text-align: center;
+    width:90%;
+    margin-bottom: 15px;
+    background-color: #FFD700;
+    color:#000;
+    font-weight: bold;
+    font-size:1.1rem;
+    padding:0.5rem;
+    border-radius: 20px;
+    cursor: pointer;
+    border:none;
+    transition: background-color 0.2s ease;
+}
+.Btn:hover{
+    background-color: #e0bb00;
+}
+a{
+    text-decoration: none;
+}
