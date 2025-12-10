@@ -38,7 +38,7 @@ const Login = () => {
         
         if(Object.keys(new_err_obj).length == 0){
             // console.log('hi')
-            const response = await axios.post(`http://localhost:3000/${role.toLowerCase()}/signin`,{
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/${role.toLowerCase()}/signin`,{
                 email: values.email,
                 password: values.password
             })

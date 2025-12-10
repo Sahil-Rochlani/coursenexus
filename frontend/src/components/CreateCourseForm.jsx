@@ -30,7 +30,7 @@ const CreateCourseForm = () => {
         const err_obj = await CourseCreationValidate({}, values)
         setErrors(err_obj)
         if(Object.values(err_obj).length == 0){
-            const response = await axios.post('http://localhost:3000/admin/course', {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/course`, {
                 title:values.title,
                 description:values.description,
                 price:values.price,

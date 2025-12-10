@@ -35,7 +35,7 @@ const AdminNavBar = () => {
     const handleLogout = async () => {
         try{
             
-            await axios.post('http://localhost:3000/logout')
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/logout`)
             setLoginStatus(false)
             setCreatedCourseIdList([])
             navigate('/authorize/signin')
@@ -62,7 +62,7 @@ const AdminNavBar = () => {
         setErrors(errorR)
         if(Object.values(errorR).length == 0){
             console.log('Successfully edited')
-            const response = await axios.put(`http://localhost:3000/admin/course/${modalCourseId}`,{
+            const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/course/${modalCourseId}`,{
                 title: values.title,
                 description: values.description,
                 price: values.price,

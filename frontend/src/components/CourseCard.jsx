@@ -49,7 +49,7 @@ const CourseCard = ({variant, id, purchased}) => {
 
     }
     const handleCoursePurchase = async () => {
-        const response = await axios.post(`http://localhost:3000/course/purchase/${id}`)
+        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/course/purchase/${id}`)
         if(response.data.purchase){
             setCourseDetails(prev => ({...prev, purchased: true}))
             setUserPurchasedList(prev => {
@@ -62,7 +62,7 @@ const CourseCard = ({variant, id, purchased}) => {
 
     }
     const handleCourseDelete = async () => {
-        const response = await axios.delete(`http://localhost:3000/course/refund/${id}`)
+        const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/course/refund/${id}`)
         if(response.data.deletedCourse){
             setCourseDetails(prev => ({...prev, purchased: false}))
             setUserPurchasedList(prev => prev.filter(cid => cid !== id))

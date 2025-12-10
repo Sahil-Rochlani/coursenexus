@@ -12,7 +12,7 @@ export const creatorCourseAtomFamily = atomFamily({
         key:'CreatorCoursjergkjergeSelectorFamily',
         get:(id) => async () => {
             try{    if(id === '')return null
-                const response = await axios.get(`http://localhost:3000/admin/course/preview/${id}`)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/course/preview/${id}`)
                 return response.data.course
             }
             catch(err){

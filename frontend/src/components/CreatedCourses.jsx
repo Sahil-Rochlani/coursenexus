@@ -14,7 +14,7 @@ const CreatedCourses = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const response = await axios.get('http://localhost:3000/admin/course/preview')
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/course/preview`)
             // console.log(response.data.courses)
             setCreatedCourseIdList(response.data.courses)
             setLoading(false)

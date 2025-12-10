@@ -43,7 +43,7 @@ const Signup = () => {
         setErrors(err_obj)
         // console.log(values)
         if(Object.keys(err_obj).length == 0){
-            const response = await axios.post(`http://localhost:3000/${role.toLowerCase()}/signup`,{
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/${role.toLowerCase()}/signup`,{
                 firstName: values.firstName,
                 lastName:values.lastName,
                 email:values.email,

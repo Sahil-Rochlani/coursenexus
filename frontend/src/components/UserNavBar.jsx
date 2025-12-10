@@ -17,7 +17,7 @@ const UserNavBar = () => {
     const [role, setRole] = useRecoilState(roleAtom)
     const handleLogout = async () => {
         try{
-            await axios.post('http://localhost:3000/logout')
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}/logout`)
             setLoginStatus(false)
             navigate('/authorize/signin')
             return
@@ -55,9 +55,9 @@ const UserNavBar = () => {
             else{
                 setLoginStatus(true)
                 setName(isAuthorized)
-                const allCourseIdList = (await axios.get('http://localhost:3000/course/preview')).data.courses
+                const allCourseIdList = (await axios.get(`${import.meta.env.VITE_BACKEND_URL}/course/preview`)).data.courses
                 // console.log(allCourseIdList)
-                const userPurchasesIdList = (await axios.get('http://localhost:3000/user/purchases')).data.courses
+                const userPurchasesIdList = (await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/purchases`)).data.courses
                 // console.log(userPurchasesIdList)
                 const purchasedSet = new Set(userPurchasesIdList)
                 setAllCourseIdList(allCourseIdList)

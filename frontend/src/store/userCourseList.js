@@ -17,7 +17,7 @@ export const courseAtomFamily = atomFamily({
         key:'courseSelectorFamily',
         get:(id) => async () => {
             try{
-                const response = await axios.get(`http://localhost:3000/course/preview/${id}`)
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/course/preview/${id}`)
                 // console.log(response.data.course)
                 return {...response.data.course, purchased:false}
             }
