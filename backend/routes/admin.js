@@ -55,7 +55,13 @@ router.post('/signup', async (req, res) => {
 
         const token = jwt.sign({id: user._id, firstName: user.firstName, lastName: user.lastName}, JWT_ADMIN_SECRET)
         // res.json({token})
-        res.cookie('token', token, {httpOnly: true})
+        const isProd = process.env.NODE_ENV === 'production';
+
+        res.cookie('token', token, {
+        httpOnly: true,
+        secure: isProd,               
+        sameSite: isProd ? 'none' : 'lax'
+        });
         
         res.json({name:`${user.firstName} ${user.lastName}`})
     }
@@ -95,7 +101,13 @@ router.post('/signin', async (req, res) => {
 
         const token = jwt.sign({id: existingUser._id, firstName: existingUser.firstName, lastName: existingUser.lastName}, JWT_ADMIN_SECRET)
         // res.json({token})
-        res.cookie('token', token, {httpOnly: true})
+        const isProd = process.env.NODE_ENV === 'production';
+
+        res.cookie('token', token, {
+        httpOnly: true,
+        secure: isProd,               
+        sameSite: isProd ? 'none' : 'lax'
+        });
         
         res.json({name:`${existingUser.firstName} ${existingUser.lastName}`})
     }

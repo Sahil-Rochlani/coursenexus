@@ -57,7 +57,13 @@ userRouter.post('/signup', async (req, res) => {
         // console.log(token)
         // res.json({token})
 
-        res.cookie('token', token, {httpOnly: true})
+        const isProd = process.env.NODE_ENV === 'production';
+
+        res.cookie('token', token, {
+        httpOnly: true,
+        secure: isProd,               
+        sameSite: isProd ? 'none' : 'lax'
+        });
         // console.log(user)
         res.json({name:`${user.firstName} ${user.lastName}`})
     }
@@ -98,7 +104,13 @@ userRouter.post('/signin', async (req, res) => {
         const token = jwt.sign({id: existingUser._id, firstName: existingUser.firstName, lastName: existingUser.lastName}, JWT_USER_SECRET)
         // res.json({token})
 
-        res.cookie('token', token, {httpOnly: true})
+        const isProd = process.env.NODE_ENV === 'production';
+
+        res.cookie('token', token, {
+        httpOnly: true,
+        secure: isProd,               
+        sameSite: isProd ? 'none' : 'lax'
+        });
         
         res.json({name:`${existingUser.firstName} ${existingUser.lastName}`})
     }

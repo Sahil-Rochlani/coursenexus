@@ -7,10 +7,12 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 require('dotenv').config()
 app.use(cookieParser())
+const FRONTEND = process.env.FRONTEND_URL; 
 app.use(cors({
-    origin:process.env.FRONTEND_URL,
-    credentials:true
-}))
+  origin: FRONTEND,
+  credentials: true,
+  methods: ['GET','POST','PUT','DELETE','OPTIONS']
+}));
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
