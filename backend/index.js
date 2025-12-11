@@ -21,10 +21,14 @@ app.use('/user', userRouter)
 app.use('/admin', adminRouter)
 app.use('/course', courseRouter)
 
+app.get("/ping", (req, res) => {
+  return res.status(200).json({message: "pong"})
+})
+
 app.post('/logout', (req, res) => {
     console.log('logout')
     res.clearCookie('token',{httpOnly: true})
-    res.json({success: 'Logged out successfully'})
+    res.status(200).json({success: 'Logged out successfully'})
 })
 
 app.listen(3000)
