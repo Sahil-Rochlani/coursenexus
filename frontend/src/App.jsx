@@ -1,3 +1,10 @@
+/**
+ * Main application component
+ * Sets up routing structure for CourseNexus platform with separate routes for:
+ * - Public routes (home, authentication)
+ * - User routes (courses, purchases)
+ * - Admin routes (course creation, management)
+ */
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import Authorize from "./components/Authorize";

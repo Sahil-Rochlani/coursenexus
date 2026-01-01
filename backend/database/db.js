@@ -1,3 +1,7 @@
+/**
+ * MongoDB database models and connection setup
+ * Defines schemas for User, Admin, Course, and Purchase entities
+ */
 require('dotenv').config()
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI)
@@ -23,7 +27,7 @@ const courseSchema = new Schema({
     description:String,
     price: Number,
     imageUrl: String,
-    creatorId: { type: ObjectId, ref: 'Admin'}
+    creatorId: { type: ObjectId, ref: 'Admin'} // References Admin who created the course
 })
 
 const purchaseSchema = new Schema({

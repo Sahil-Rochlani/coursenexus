@@ -1,6 +1,10 @@
+/**
+ * Input validation schemas using Zod
+ * Provides validation for user signup, signin, and course creation forms
+ */
 const { default: axios } = require('axios')
 const { z } = require('zod')
-// const axios = require('axios')
+
 const signUpfirstnameSchema = z.string({required_error: 'First Name is required'})
                      .trim()
                      .min(1, 'First Name cant be empty')
@@ -19,6 +23,7 @@ const signUpemailSchema = z.string({required_error: 'Email is required'})
                             .email('Please enter a valid email address')
                             .max(320, 'Email is too long')
 
+// Password must contain: 8+ chars, uppercase, lowercase, number, special character
 const passwordSchema = z.string()
                          .min(8, 'Password must be at least 8 characters')
                          .regex(/[A-Z]/, { message: 'Password must contain at least one uppercase letters'} )
@@ -39,6 +44,11 @@ const signupPasswordSchema = z.string({required_error: 'Password is required'})
                                     }
                                })
 
+/**
+ * Signup validation schema
+ * Validates firstName, lastName, email, and password for user/admin registration
+ * @type {z.ZodObject}
+ */
 const signupSchema = z.object({
     firstName: signUpfirstnameSchema,
     lastName: signUplastnameSchema,
@@ -56,13 +66,21 @@ const signinPasswordSchema = z.string({required_error: 'Password is required'})
                                .trim()
                                .min(1, 'Password cannot be empty')
 
-
+/**
+ * Signin validation schema
+ * Validates email and password for user/admin login
+ * @type {z.ZodObject}
+ */
 const signinSchema = z.object({
     email:signinEmailSchema,
     password: signinPasswordSchema
 })
 
-
+/**
+ * Validates that a URL points to a valid image by checking Content-Type header
+ * @param {string} url - Image URL to validate
+ * @returns {Promise<boolean>} Resolves to true if valid image, rejects otherwise
+ */
 const validateImageUrl = async (url) => {
     return new Promise(async (resolve, reject) => {
         const response = await axios.get(url, { responseType: 'stream' });
@@ -111,6 +129,11 @@ const imageUrlSchema = z.string({required_error: 'Image URL is required.'})
                             }
                          })
 
+/**
+ * Course creation validation schema
+ * Validates title, description, price, and imageUrl for course creation
+ * @type {z.ZodObject}
+ */
 const courseCreateFormSchema = z.object({
     title: titleSchema,
     description: descriptionSchema,

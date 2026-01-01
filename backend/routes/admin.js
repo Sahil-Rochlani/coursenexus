@@ -8,8 +8,47 @@ const jwt = require('jsonwebtoken')
 const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET
 const { adminMiddleware } = require('../middleware/admin')
 const mongoose = require('mongoose')
-// const { default: errorMap } = require('zod/lib/locales/en')
 
+/**
+ * @swagger
+ * /admin/signup:
+ *   post:
+ *     summary: Register a new admin
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Admin registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *       401:
+ *         description: Validation error or admin already exists
+ */
 router.post('/signup', async (req, res) => {
     try{
         const signup_validation = signupSchema.safeParse(req.body)
@@ -54,7 +93,6 @@ router.post('/signup', async (req, res) => {
         })
 
         const token = jwt.sign({id: user._id, firstName: user.firstName, lastName: user.lastName}, JWT_ADMIN_SECRET)
-        // res.json({token})
         const isProd = process.env.NODE_ENV === 'production';
 
         res.cookie('token', token, {
@@ -70,6 +108,40 @@ router.post('/signup', async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /admin/signin:
+ *   post:
+ *     summary: Authenticate admin and sign in
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Admin authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *       401:
+ *         description: Invalid credentials or validation error
+ */
 router.post('/signin', async (req, res) => {
     try{
         const signin_validation = signinSchema.safeParse(req.body)
@@ -100,7 +172,6 @@ router.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign({id: existingUser._id, firstName: existingUser.firstName, lastName: existingUser.lastName}, JWT_ADMIN_SECRET)
-        // res.json({token})
         const isProd = process.env.NODE_ENV === 'production';
 
         res.cookie('token', token, {
@@ -116,6 +187,52 @@ router.post('/signin', async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /admin/course:
+ *   post:
+ *     summary: Create a new course (admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - description
+ *               - price
+ *               - imageUrl
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 minLength: 5
+ *                 maxLength: 100
+ *               description:
+ *                 type: string
+ *                 minLength: 20
+ *                 maxLength: 1000
+ *               price:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
+ *                 format: uri
+ *     responses:
+ *       200:
+ *         description: Course created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 course:
+ *                   type: object
+ *       401:
+ *         description: Validation error or unauthorized
+ */
 router.post('/course', adminMiddleware, async (req, res) => {
     try{
         const validation = await courseCreateFormSchema.spa(req.body)
@@ -137,6 +254,7 @@ router.post('/course', adminMiddleware, async (req, res) => {
         const price = parseInt(req.body.price)
         const imageUrl = req.body.imageUrl
 
+        // Create course with admin ID as creator
         const course = await courseModel.create({
             title,
             description,
@@ -155,6 +273,49 @@ router.post('/course', adminMiddleware, async (req, res) => {
 
 })
 
+/**
+ * @swagger
+ * /admin/course/{id}:
+ *   put:
+ *     summary: Update a course (admin can only update their own courses)
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Course ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: string
+ *               imageUrl:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Course updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 course:
+ *                   type: object
+ *       401:
+ *         description: Unauthorized or course not found
+ */
 router.put('/course/:id', adminMiddleware,async (req, res) => {
         try{
             
@@ -166,6 +327,7 @@ router.put('/course/:id', adminMiddleware,async (req, res) => {
             const price = parseInt(req.body.price)
             const imageUrl = req.body.imageUrl
 
+            // Only update if course belongs to the authenticated admin
             const updatedCourse = await courseModel.findOneAndUpdate({_id:id, creatorId:req.admin.id}, {
                 title,
                 description,
@@ -173,7 +335,7 @@ router.put('/course/:id', adminMiddleware,async (req, res) => {
                 imageUrl
                 
             },{new: true})
-            // console.log(updatedCourse)
+            
             if(updatedCourse !== null)
             res.json({course:updatedCourse})
             else
@@ -184,11 +346,30 @@ router.put('/course/:id', adminMiddleware,async (req, res) => {
         }
 })
 
+/**
+ * @swagger
+ * /admin/course/preview:
+ *   get:
+ *     summary: Get list of course IDs created by authenticated admin
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of course IDs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 courses:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ */
 router.get('/course/preview', adminMiddleware, async (req, res) => {
     try{
-        
         const courses = await courseModel.find({creatorId: req.admin.id})
-        // console.log(courses)
         res.json({courses: courses.map(course => course._id)})
     }
     catch(err){
@@ -196,11 +377,37 @@ router.get('/course/preview', adminMiddleware, async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /admin/course/preview/{id}:
+ *   get:
+ *     summary: Get course details by ID
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Course ID
+ *     responses:
+ *       200:
+ *         description: Course details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 course:
+ *                   type: object
+ */
 router.get('/course/preview/:id', adminMiddleware, async (req, res)  => {
     try{
         const id = req.params.id
+        // Exclude creatorId from response
         const course = await courseModel.findById(id, {creatorId: 0})
-        // console.log(course)
         res.json({course})
     }
     catch(err){
@@ -208,8 +415,26 @@ router.get('/course/preview/:id', adminMiddleware, async (req, res)  => {
     }
 })
 
+/**
+ * @swagger
+ * /admin/me:
+ *   get:
+ *     summary: Get current authenticated admin information
+ *     tags: [Admin]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ */
 router.get('/me', adminMiddleware, (req, res) => {
-    // console.log(req.admin)
     res.json({name: `${req.admin.firstName} ${req.admin.lastName}`})
 })
 

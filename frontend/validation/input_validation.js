@@ -1,6 +1,18 @@
+/**
+ * Frontend input validation utilities using Zod
+ * Provides client-side validation for forms with field-level and full-form validation support
+ */
 import { z } from "zod"
 
-
+/**
+ * Validates signup form fields (firstName, lastName, email, password, repeat_pswd)
+ * Supports both single-field validation and full-form validation
+ * @param {Object} options - Validation options
+ * @param {string|null} options.field - Field name to validate (null for full form)
+ * @param {Object|null} options.err_obj - Existing error object to update
+ * @param {Object} values - Form values to validate
+ * @returns {Object} Error object with field names as keys and error messages as values
+ */
 export const signupValidate = ({field = null, err_obj = null} = {}, values) => {
     const firstName = z.string({required_error: 'First Name is required'})
                         .trim()
@@ -85,6 +97,15 @@ export const signupValidate = ({field = null, err_obj = null} = {}, values) => {
     }
 }
 
+/**
+ * Validates signin form fields (email, password)
+ * Supports both single-field validation and full-form validation
+ * @param {Object} options - Validation options
+ * @param {string|null} options.field - Field name to validate (null for full form)
+ * @param {Object|null} options.err_obj - Existing error object to update
+ * @param {Object} values - Form values to validate
+ * @returns {Object} Error object with field names as keys and error messages as values
+ */
 export const signinValidate = ({field = null, err_obj = null} = {}, values) => {
     const email = z.string({required_error: 'Email is required'})
                                 .trim()
@@ -123,6 +144,11 @@ export const signinValidate = ({field = null, err_obj = null} = {}, values) => {
     }
 }
 
+/**
+ * Validates that a URL points to a valid image by attempting to load it
+ * @param {string} url - Image URL to validate
+ * @returns {Promise<boolean>} Resolves to true if image loads successfully, rejects otherwise
+ */
 const validateImageUrl = (url) => {
     return new Promise((resolve, reject) => {
         const image = new Image()
@@ -133,6 +159,16 @@ const validateImageUrl = (url) => {
         image.src = url
     })
 }
+
+/**
+ * Validates course creation form fields (title, description, price, imageUrl)
+ * Supports both single-field validation and full-form validation
+ * @param {Object} options - Validation options
+ * @param {string|null} options.field - Field name to validate (null for full form)
+ * @param {Object|null} options.err_obj - Existing error object to update
+ * @param {Object} values - Form values to validate
+ * @returns {Promise<Object>} Error object with field names as keys and error messages as values
+ */
 export const CourseCreationValidate = async ({field = null, err_obj = null} = {}, values) => {
     const title = z.string({required_error: 'Title is required.'})
                     .trim()

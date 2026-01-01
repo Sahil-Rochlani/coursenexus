@@ -7,6 +7,59 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const JWT_USER_SECRET = process.env.JWT_USER_SECRET
 const { userMiddleware } = require('../middleware/user')
+
+/**
+ * @swagger
+ * /user/signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - email
+ *               - password
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 50
+ *               lastName:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 50
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *       400:
+ *         description: Validation error or user already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: object
+ */
 userRouter.post('/signup', async (req, res) => {
     
 
@@ -36,14 +89,14 @@ userRouter.post('/signup', async (req, res) => {
         const lastName = req.body.lastName
         const email = req.body.email.toLowerCase()
         const password = req.body.password
-        // console.log(firstName)
+        
         const existingUser = await userModel.findOne({email})
-        // console.log(existingUser)
         if(existingUser){
             res.status(400).json({error:{email: 'The user with the given email address already exists. Please use another email or login.'}})
             return
         }
 
+        // Hash password with bcrypt (10 salt rounds)
         const hashedPassword = await bcrypt.hash(password, 10)
         
         const user = await userModel.create({
@@ -52,19 +105,18 @@ userRouter.post('/signup', async (req, res) => {
             email,
             password: hashedPassword
         })
-        // console.log(user)
+        
+        // Generate JWT token with user data
         const token = jwt.sign({id: user._id, firstName: user.firstName, lastName: user.lastName}, JWT_USER_SECRET)
-        // console.log(token)
-        // res.json({token})
 
+        // Set cookie with environment-specific security settings
         const isProd = process.env.NODE_ENV === 'production';
-
         res.cookie('token', token, {
         httpOnly: true,
-        secure: isProd,               
-        sameSite: isProd ? 'none' : 'lax'
+        secure: isProd, // HTTPS only in production               
+        sameSite: isProd ? 'none' : 'lax' // Cross-site cookies in production
         });
-        // console.log(user)
+        
         res.json({name:`${user.firstName} ${user.lastName}`})
     }
     catch(err){
@@ -72,6 +124,47 @@ userRouter.post('/signup', async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /user/signin:
+ *   post:
+ *     summary: Authenticate user and sign in
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *       400:
+ *         description: Invalid credentials or validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: object
+ */
 userRouter.post('/signin', async (req, res) => {
     try{
         const signin_validation = signinSchema.safeParse(req.body)
@@ -95,6 +188,8 @@ userRouter.post('/signin', async (req, res) => {
             res.status(400).json({error:{email: 'The user with the given email address doesnt exist. Please use another email or signup.'}})
             return
         }
+        
+        // Verify password against hashed password in database
         const isCorrectPassword = await bcrypt.compare(password, existingUser.password)
         if(!isCorrectPassword){
             res.status(400).json({error: {password: 'The entered password is incorrect.'}})
@@ -102,10 +197,8 @@ userRouter.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign({id: existingUser._id, firstName: existingUser.firstName, lastName: existingUser.lastName}, JWT_USER_SECRET)
-        // res.json({token})
 
         const isProd = process.env.NODE_ENV === 'production';
-
         res.cookie('token', token, {
         httpOnly: true,
         secure: isProd,               
@@ -121,18 +214,58 @@ userRouter.post('/signin', async (req, res) => {
 
 })
 
+/**
+ * @swagger
+ * /user/purchases:
+ *   get:
+ *     summary: Get list of purchased course IDs for authenticated user
+ *     tags: [User]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of purchased course IDs
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 courses:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ */
 userRouter.get('/purchases', userMiddleware, async (req, res) => {
     try{
+        // Extract course IDs from purchase records, excluding metadata fields
         const courses = (await purchaseModel.find({userId: req.user.id}, {userId:0, __v:0, _id:0})).map((course) => course.courseId)
-        // console.log(courses)
         res.json({courses})
     }
     catch(err){
         console.log(err)
     }
 })
+
+/**
+ * @swagger
+ * /user/me:
+ *   get:
+ *     summary: Get current authenticated user information
+ *     tags: [User]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: User information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ */
 userRouter.get('/me', userMiddleware, (req, res) => {
-    // console.log('hi')
     res.json({name: `${req.user.firstName} ${req.user.lastName}`})
 })
 
